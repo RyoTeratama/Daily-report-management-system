@@ -20,11 +20,26 @@
                 <c:forEach var="report" items="${reports}" varStatus="status">
                     <tr class="row${status.count % 2}">
                         <td class="report_name"><c:out value="${report.employee.name}" />
-                        <form action="<c:url value='/follows/create' />" method="post">
-                        <input type="hidden" name="_token" value="${_token}" />
-                        <input type="hidden" name="emp_id" value="${report.employee.id}">
-                        <button type="submit">follow</button>
-                        </form></td>
+
+                        <c:choose>
+                            <c:when test="${report.employee.id == login_employee.id}">
+                            </c:when>
+                            <c:when test="${getFollowData[report.employee.id] != null}">
+                                        <form method="POST" action="<c:url value='/follows/destroy' />">
+                                        <input type="hidden" name="_token" value="${_token}" />
+                                        <input type="hidden" name="emp_id" value="${report.employee.id}">
+                                        <button type="submit">解除</button>
+                                        </form>
+                            </c:when>
+                            <c:otherwise>
+                                    <form method="POST" action="<c:url value='/follows/create' />">
+                                    <input type="hidden" name="_token" value="${_token}" />
+                                    <input type="hidden" name="emp_id" value="${report.employee.id}">
+                                    <button type="submit">フォロー</button>
+                                    </form>
+                            </c:otherwise>
+                        </c:choose>
+                        </td>
                         <td class="report_date"><fmt:formatDate value='${report.report_date}' pattern='yyyy-MM-dd' /></td>
                         <td class="report_title">${report.title}</td>
                         <td class="report_action"><a href="<c:url value='/reports/show?id=${report.id}' />">詳細を見る</a></td>

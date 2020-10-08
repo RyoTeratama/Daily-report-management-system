@@ -34,7 +34,6 @@ public class TopPageIndexServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManager em = DBUtil.createEntityManager();
-
         Employee login_employee = (Employee)request.getSession().getAttribute("login_employee");
 
         int page;

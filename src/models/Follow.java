@@ -19,9 +19,9 @@ import javax.persistence.Table;
     @NamedQuery(//フォローしている時フォロー情報を取得
             name = "getFollowData",
             query = "select f from Follow AS f WHERE f.follower_id = :logid AND f.followed_id = :employee "),
-    @NamedQuery(//フォロワー数を取得
-            name = "getFollowerCount",
-            query = "select count(f) from Follow AS f WHERE f.followed_id = :employee "),
+    @NamedQuery(//フォローしている人のID取得
+            name = "getAllFollowData",
+            query = "select f from Follow AS f WHERE f.follower_id = :logid "),
 })
 
 @Entity

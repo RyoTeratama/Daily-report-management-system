@@ -13,24 +13,14 @@ import models.Employee;
 import models.Follow;
 import utils.DBUtil;
 
-/**
- * Servlet implementation class FollowCreateServlet
- */
-@WebServlet("/follows/create")
-public class FollowCreateServlet extends HttpServlet {
+@WebServlet("/follows/destroy")
+public class FollowDestroyServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FollowCreateServlet() {
+    public FollowDestroyServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String _token = (String)request.getParameter("_token");
         if(_token != null && _token.equals(request.getSession().getId())) {
@@ -39,16 +29,17 @@ public class FollowCreateServlet extends HttpServlet {
 
             Follow f = new Follow();
 
-            f.setFollowed_id(Integer.parseInt(request.getParameter("emp_id")));
-            f.setFollower_id(login_employee.getId());
+            f =em.createNamedQuery("getFollowData", Follow.class)
+                .setParameter("employee" ,Integer.parseInt(request.getParameter("emp_id")))
+                .setParameter("logid", login_employee.getId())
+                .getSingleResult();
 
             em.getTransaction().begin();
-            em.persist(f);
+            em.remove(f);
             em.getTransaction().commit();
             em.close();
-        }
 
-        response.sendRedirect(request.getContextPath() + "/reports/index");
+            response.sendRedirect(request.getContextPath() + "/reports/index");
+            }
     }
-
 }
